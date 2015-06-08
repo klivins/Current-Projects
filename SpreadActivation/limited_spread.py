@@ -51,7 +51,7 @@ def describe_network(network, start_node):
         cue.remove(current_node)
         
 
-#Function to activate the desired number of "students" based on proximity to the
+#Function to activate the desired number of children based on proximity to the
 #intially activated node, and then number of children.  
 def spread_limit(desired_activation_number, activated_nodes, nodes):
     
