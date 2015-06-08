@@ -51,15 +51,15 @@ def describe_network(network, start_node):
         cue.remove(current_node)
         
 
-#Function to infect the desired number of "students" based on proximity to the
-#"infector"/"coach" node, and then number of children.  
+#Function to activate the desired number of "students" based on proximity to the
+#intially activated node, and then number of children.  
 def spread_limit(desired_activation_number, activated_nodes, nodes):
     
-    #Find the largest distance that any node is away from the infection node,
+    #Find the largest distance that any node is away from the initial activation node,
     #and make it available as a counter
     largest_dist = max(nodes, key = lambda node: node.distance).distance
 
-    #For each value in that max distance, infect nodes at each level farther away
+    #For each value in that max distance, activate nodes at each level farther away
     #from the "activated node", until the desired number of activated nodes is reached.
     for dist in range(largest_dist):
         considered_dist = dist
@@ -67,23 +67,23 @@ def spread_limit(desired_activation_number, activated_nodes, nodes):
         #Make an array of all the nodes with the specified distance
         considering = [node for node in nodes if considered_dist == node.distance]
         
-        #If the number of nodes in the level is less than the desired infection
-        #number, then infect the whole level
+        #If the number of nodes in the level is less than the desired activation
+        #number, then activate the whole level
         if (len(considering)+len(activated_nodes)) < desired_activation_number:
             for node in considering:
                 node.activated= True
                 activated_nodes.append(node)
         
-        #If infecting the number of nodes in the level would infect more nodes
+        #If activating the number of nodes in the level would activate more nodes
         #than desired, search all the nodes for the fewest node connections in the
-        #next farthest level. Infect that node, then repeat until the desired
-        #number of infected nodes is reached.
+        #next farthest level. Activate that node, then repeat until the desired
+        #number of activated nodes is reached.
         else:
             
             #Find the number of nodes that still need to be activated
             available = desired_activation_number-len(activated_nodes)
     
-            #While there are some available, consider nodes for infection.
+            #While there are some available, consider nodes for activation.
             while available >= 0:
         
                 #Start with the first node in considering list
@@ -97,7 +97,7 @@ def spread_limit(desired_activation_number, activated_nodes, nodes):
                     if len(node.children) < len(current_lowest_node.children):
                         current_lowest_node = node
                 
-                #Infect the current lowest node, add it to the activated list,
+                #Activate the current lowest node, add it to the activated list,
                 #and remove it from consideration.
                 current_lowest_node.activated = True
                 activated_nodes.append(current_lowest_node)
@@ -117,30 +117,30 @@ links = network[1]
 #activated
 activated_nodes = []
 
-#Initiate a variable to track whether the network has reached desired infection
+#Initiate a variable to track whether the network has reached desired activation
 #Change this if you want to a greater or smaller number of people
 desired_activation_number = 20
 
-#Choose the node that will be the gensis of the infection
+#Choose the node that will be the gensis of the activation
 start_node = choice(nodes)
 start_node.activated = True
 activated_nodes.append(start_node)
 
-#Check if the network is smaller than the desired infection number. If not,
-#continue the infection process. If so, infect everything and tell the user
+#Check if the network is smaller than the desired activation number. If not,
+#continue the activation process. If so, activate everything and tell the user
 #that the size of the network is insufficient. 
 if desired_activation_number < len(nodes):
-    #Run the function to determine node distances from the "instructor node"
+    #Run the function to determine node distances from the "activation node"
     describe_network(network, start_node)
 
-    #Run the function to infect the desired number of nodes.
+    #Run the function to activate the desired number of nodes.
     spread_limit(desired_activation_number, activated_nodes, nodes)
 else:
     for node in nodes:
         node.activated = True
         print "Your network is too small"
 
-#Print the final infection outcome
+#Print the final activation outcome
 for node in nodes:
     print node.identifier
     print node.activated
